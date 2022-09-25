@@ -1,0 +1,81 @@
+---
+title: "p8105_hw1_mnt2130"
+author: Mindy Tran
+date: "2022-09-22"
+output: html_document
+
+---
+
+## Problem 1
+
+Here's a **code chunk** that samples from the _penguins_ dataset with a short description of the dataset containing the names/values of important variables, the size of the dataset and the mean flipper length. 
+
+```{r problem 1}
+library(tidyverse)
+data("penguins", package = "palmerpenguins")
+``` 
+
+The data set contains a sample size of `r nrow(penguins)` penguins and includes `r ncol(penguins)` variables. The variables include:`r colnames(penguins)`. The variables types include `r sapply(penguins, class)` and each variable type listed corresponds with the respective order of the variable names previously listed.
+
+The size of this data set is `r nrow(penguins)` rows and includes `r ncol(penguins)` columns. 
+
+The mean flipper length of the 344 penguins in this data set is 
+`r round(mean(pull(penguins, flipper_length_mm), na.rm = TRUE), digits = 3)` mm.
+
+
+### Scatterplot of Flipper Length by Bill Length 
+
+The code chunk below creates a scatterplot of the variable bill_length_mm by flipper_length_mm and saves it as an image file. 
+
+```{r problem 1_scatter, warning = FALSE}
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)
+       ) + geom_point()
+ggsave("penguins.scatter.pdf", height = 5, width = 7)
+```
+
+## Problem 2
+
+The following code chunk creates a data frame that meets the following criteria: 
+ a random sample of size 10 from a standard Normal distribution;
+ a logical vector indicating whether elements of the sample are greater than 0;
+ a character vector of length 10;
+ and a factor vector of length 10, with 3 different factor levels.
+
+``` {r_dataframe}
+df_p2 = tibble(
+  vec_numeric = rnorm (10),
+  vec_logical = vec_numeric > 0,
+  vec_character = c("Data", "science", "is", "a", "cool", "class", "I", "am", "learning", "much"),
+  vec_factor = factor (c ("hot", "cold", "warm", "hot", "cold", "warm", "hot", "cold", "warm", "hot" ))
+)
+```
+
+#### Mean of the Data Frame
+
+```{r_mean_df}
+mean(pull(df_p2, vec_numeric))
+mean(pull(df_p2, vec_logical))
+mean(pull(df_p2, vec_character))
+mean(pull(df_p2, vec_factor))
+```
+
+When attempting to take the mean of each variable, only the vectors that contains a random sample of size 10 from a standard Normal distribution (vec_numeric) and a logical vector indicating whether elements of the sample are greater than 0 (vec_logical) resulted in a calculated mean. Taking the mean of vec_character and vec_factor did not work and resulted in a warning message when trying to knit stating that the argument is not numeric or logical: returning NA. 
+
+**Now we will convert the logical, character, and factor vectors into numeric variables.**
+
+``````{r_convert, warning = FALSE}
+as.numeric (pull(df_p2, vec_logical))
+as.numeric (pull(df_p2, vec_character))
+as.numeric (pull(df_p2, vec_factor))
+```
+
+From this convert function, we were able to convert the logical vector (vec_logical) and the factor vector (vec_factor) into a numeric variable where True=1 and False=0 for vec_logical and hot=2,cold=1,and warm=3 for vec_factor. Using the convert function on vec_character resulted in an error with the conversion resulting in NA. This happens because R could not assign a numerical number to the 10 different characters since there is no way to represent each character by a number value. The inability to convert it into a numerical value also makes it impossible for the mean of this vector to be calculated since the mean is also a numeric value. For the logical and factor vectors since it can be converted to a numeric value that represents True or False (1 or 0 ) or 3 levels of a factor vector using the values 1,2, and 3 to represent hot, cold, warm, the mean can be calculated. 
+
+
+
+
+
+
+
+
+
